@@ -24,6 +24,8 @@ Expecting a JSON array of objects consisting of the following:
 - `end_time`: 2-item array with minutes and seconds.
 - (Optional) `output`: Name of output file. Will output in working directory.
   - Default: Outputs to same directory as `video`.
+- (Optional) `resolution`: 2-item array with height and width.
+  - Default: Height and width of source video.
 
 #### Example
 ```json
@@ -43,7 +45,8 @@ Expecting a JSON array of objects consisting of the following:
 		"video": "D:\\Recordings\\2024-11-02 12-02-36.mp4",
 		"start_time": [6, 6],
 		"end_time": [6, 36],
-		"output": "Untouchable"
+		"output": "Untouchable",
+		"resolution": [1080, 2580],
 	}
 ]
 ```

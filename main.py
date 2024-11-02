@@ -25,12 +25,12 @@ def parse_clip_data(file_path: str) -> list[VideoClipData]:
 
 	all_clip_data: list[VideoClipData] = []
 	for data_group in input_json:
-		output_name = data_group["output"] if "output" in data_group else ""
 		all_clip_data.append(VideoClipData(
 			file_path=data_group["video"],
 			start_time=tuple(data_group["start_time"]),
 			end_time=tuple(data_group["end_time"]),
-			output=output_name
+			resolution=data_group.get("resolution", None),
+			output=data_group.get("output", "")
 		))
 
 	return all_clip_data

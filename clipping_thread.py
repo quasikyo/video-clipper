@@ -7,10 +7,24 @@ from moviepy.editor import VideoFileClip
 
 @dataclass
 class VideoClipData:
+	# required
 	file_path: str
-	start_time: tuple[str, str]
-	end_time: tuple[str, str]
+	start_time: tuple[int, int]
+	end_time: tuple[int, int]
+	# optional
+	resolution: tuple[int, int] # actually a list, bite me.
 	output: str
+
+
+	def get_output_name(self):
+		file_path, extension = path.splitext(self.file_path)
+		name = self.output
+		if len(name) != 0:
+			return f"{name}{extension}"
+
+		start_timestamp = ','.join(map(str, self.start_time))
+		end_timestamp = ','.join(map(str, self.end_time))
+		return f"{file_path} Clip {start_timestamp}-{end_timestamp}{extension}"
 
 
 class ClippingThread(threading.Thread):
@@ -24,22 +38,9 @@ class ClippingThread(threading.Thread):
 
 	def run(self):
 		clip_data = self.clip_data
-		output_name = self.get_output_name()
+		output_name = clip_data.get_output_name()
+		resolution = clip_data.resolution
 
-		video = VideoFileClip(clip_data.file_path)
-		video = video.subclip(clip_data.start_time, clip_data.end_time)
-
-		print(f"Starting thread for {clip_data}")
-		video.write_videofile(output_name)
-		print(f"Outputed to {output_name}")
-
-
-	def get_output_name(self):
-		file_path, extension = path.splitext(self.clip_data.file_path)
-		name = self.clip_data.output
-		if len(name) != 0:
-			return f"{name}{extension}"
-
-		start_timestamp = ','.join(map(str, self.clip_data.start_time))
-		end_timestamp = ','.join(map(str, self.clip_data.end_time))
-		return f"{file_path} Clip {start_timestamp}-{end_timestamp}{extension}"
+		with VideoFileClip(clip_data.file_path, target_resolution=resolution) as video:
+			video = video.subclip(clip_data.start_time, clip_data.end_time)
+			video.write_videofile(output_name)
