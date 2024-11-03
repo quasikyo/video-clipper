@@ -19,7 +19,9 @@ python main.py [-f|--file] "path/to/input.json"
 
 ## Input File Structure
 - `input_directory`: Absolute path indicating where to look for files.
+  - Leave blank to read from working directory.
 - `output_directory`: Absolute path indicating where to output files.
+  - Leave blank to output to working directory.
 - `clips`: array of objects consisting of the following:
   - `video`:` Absolute or relative path to source video file.
     - If relative, appended onto `input_directory`.

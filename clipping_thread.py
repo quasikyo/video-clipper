@@ -18,15 +18,21 @@ class VideoClipData:
 class ClippingThread(threading.Thread):
 	'''
 	Thread to clip videos using moviepy.
+
+	Parameters:
+	- clip_data: VideoClipData
 	'''
-	def __init__(self, clip_data: VideoClipData):
-		super().__init__(daemon=False)
+	def __init__(self, **kwargs):
+		clip_data: VideoClipData = kwargs["clip_data"]
+		del kwargs["clip_data"]
+		super().__init__(**kwargs)
 		self.clip_data = clip_data
 
 
 	def run(self):
 		clip_data = self.clip_data
+		video_path = str(clip_data.input_path)
 		video: VideoFileClip
-		with VideoFileClip(str(clip_data.input_path), target_resolution=clip_data.resolution) as video:
+		with VideoFileClip(video_path, target_resolution=clip_data.resolution) as video:
 			video = video.subclip(clip_data.start_time, clip_data.end_time)
 			video.write_videofile(str(clip_data.output_path), codec=clip_data.codec)

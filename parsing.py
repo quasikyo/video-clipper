@@ -1,4 +1,5 @@
 import json
+import logging
 from typing import Any
 from pathlib import Path
 
@@ -58,7 +59,7 @@ def _get_abs_path(base_abs_path: Path, maybe_abs_path: Path) -> Path:
 
 def _parse_resolution(input_group: dict[str, Any]) -> tuple | None:
 	'''
-	Parses (width, height) resolution into (height, width) if present for FFMPEG.
+	Parses (width, height) resolution if present into (height, width) for FFMPEG.
 	Otherwise returns `None` to use base file's resolution.
 	'''
 	resolution = input_group.get("resolution", None)
